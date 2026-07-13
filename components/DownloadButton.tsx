@@ -10,22 +10,30 @@ export function DownloadButton({ targetId, filename }: { targetId: string; filen
     const el = document.getElementById(targetId);
     if (!el) return;
 
-    const originalStyle = el.getAttribute("style");
     const width = el.offsetWidth;
-    const height = Math.round((width * 16) / 9);
+    const height = el.offsetHeight;
 
-    // Force explicit pixel dimensions on the real element so the cloned
-    // node renders at full height (html-to-image reads computed styles,
-    // and `aspect-ratio` is unreliable inside the clone).
-    el.style.width = `${width}px`;
-    el.style.height = `${height}px`;
-    el.style.aspectRatio = "auto";
+    // Let one frame of layout settle before capture so container/aspect
+    // sizing is final.
+    await new Promise((r) => requestAnimationFrame(() => r(null)));
 
     setLoading(true);
     try {
       const dataUrl = await toPng(el, {
         backgroundColor: "#16121f",
         pixelRatio: 2,
+        width,
+        height,
+        // Applied to the cloned node html-to-image renders from — neutralises
+        // any transform/scale and pins the clone to the on-screen geometry so
+        // the canvas and content match (no clipping / blank space).
+        style: {
+          transform: "none",
+          transformOrigin: "top left",
+          width: `${width}px`,
+          height: `${height}px`,
+          aspectRatio: "auto",
+        },
         cacheBust: true,
       });
       const link = document.createElement("a");
@@ -36,11 +44,6 @@ export function DownloadButton({ targetId, filename }: { targetId: string; filen
       // Capture can fail if external images haven't loaded — the
       // score text is what matters.
     } finally {
-      if (originalStyle !== null) {
-        el.setAttribute("style", originalStyle);
-      } else {
-        el.removeAttribute("style");
-      }
       setLoading(false);
     }
   }, [targetId, filename]);
