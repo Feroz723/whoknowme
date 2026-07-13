@@ -254,15 +254,6 @@ export function CreateQuizFlow() {
 
   // ---------- SUCCESS ----------
   if (phase === "success" && result) {
-    const fullTakeUrl =
-      typeof window !== "undefined"
-        ? `${window.location.origin}${result.takeUrl}`
-        : result.takeUrl;
-    const fullEditUrl =
-      typeof window !== "undefined"
-        ? `${window.location.origin}${result.editUrl}`
-        : result.editUrl;
-
     return (
       <StackedCard eyebrow="Step 3 of 3 — done">
         <h2 className="text-[20px] font-bold text-text mb-1">
@@ -273,22 +264,24 @@ export function CreateQuizFlow() {
           person who might make one too.
         </p>
 
-        <LinkRow label="Quiz link — share this" value={fullTakeUrl} />
+        <LinkRow label="Quiz link — share this" value={result.takeUrl} />
         <div className="h-3" />
         <LinkRow
           label="Your private results link — save this, it won't be shown again"
-          value={fullEditUrl}
+          value={result.editUrl}
           muted
         />
 
-        <a
-          href={whatsappShareUrl(quizShareText(creatorName, fullTakeUrl))}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block mt-6"
+        <Button
+          className="w-full mt-6"
+          onClick={() => {
+            const url = `${window.location.origin}${result.takeUrl}`;
+            const text = quizShareText(creatorName, url);
+            window.open(whatsappShareUrl(text), "_blank", "noopener");
+          }}
         >
-          <Button className="w-full">Share on WhatsApp</Button>
-        </a>
+          Share on WhatsApp
+        </Button>
       </StackedCard>
     );
   }
@@ -321,7 +314,7 @@ function LinkRow({
         </code>
         <button
           onClick={async () => {
-            await navigator.clipboard.writeText(value);
+            await navigator.clipboard.writeText(`${window.location.origin}${value}`);
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
           }}

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/Button";
-import { whatsappShareUrl, quizShareText } from "@/lib/whatsapp";
 
 export function ManageLinks({
   slug,
@@ -13,10 +12,16 @@ export function ManageLinks({
 }) {
   const [copied, setCopied] = useState(false);
 
-  const takeUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/q/${slug}`
-      : `/q/${slug}`;
+  const takeUrl = `/q/${slug}`;
+
+  function absoluteUrl(): string {
+    return `${window.location.origin}${takeUrl}`;
+  }
+
+  function shareWhatsApp() {
+    const text = `${creatorName} made a quiz to see who actually knows them. Think it's you? ${absoluteUrl()}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+  }
 
   return (
     <div className="space-y-2.5">
@@ -26,7 +31,7 @@ export function ManageLinks({
         </code>
         <button
           onClick={async () => {
-            await navigator.clipboard.writeText(takeUrl);
+            await navigator.clipboard.writeText(absoluteUrl());
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
           }}
@@ -36,14 +41,9 @@ export function ManageLinks({
         </button>
       </div>
 
-      <a
-        href={whatsappShareUrl(quizShareText(creatorName, takeUrl))}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block"
-      >
-        <Button className="w-full">Share quiz link</Button>
-      </a>
+      <Button className="w-full" onClick={shareWhatsApp}>
+        Share quiz link
+      </Button>
     </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/Button";
-import { whatsappShareUrl, resultShareText } from "@/lib/whatsapp";
 
 function shareText(takerName: string, creatorName: string, scorePercent: number): string {
   return `${takerName} scored ${Math.round(scorePercent)}% on ${creatorName}'s friendship quiz. Think you can beat that?`;
@@ -23,14 +22,13 @@ export function ResultShare({
 }) {
   const [copied, setCopied] = useState(false);
 
-  const resultUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/q/${slug}/result/${responseId}`
-      : `/q/${slug}/result/${responseId}`;
-
+  const resultPath = `/q/${slug}/result/${responseId}`;
   const text = shareText(takerName, creatorName, scorePercent);
+  const ogUrl = `${resultPath}/opengraph-image`;
 
-  const ogUrl = `/q/${slug}/result/${responseId}/opengraph-image`;
+  function absoluteUrl(): string {
+    return `${window.location.origin}${resultPath}`;
+  }
 
   return (
     <div>
@@ -44,21 +42,21 @@ export function ResultShare({
       </div>
 
       <div className="flex gap-2.5 mb-2.5">
-        <a
-          href={whatsappShareUrl(
-            resultShareText(takerName, creatorName, scorePercent, resultUrl)
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button
           className="flex-1"
+          onClick={() => {
+            const url = absoluteUrl();
+            const waText = `${takerName} scored ${Math.round(scorePercent)}% on ${creatorName}'s friendship quiz. Think you can beat that? ${url}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, "_blank", "noopener");
+          }}
         >
-          <Button className="w-full">Share on WhatsApp</Button>
-        </a>
+          Share on WhatsApp
+        </Button>
         <Button
           variant="secondary"
           className="flex-1"
           onClick={async () => {
-            await navigator.clipboard.writeText(resultUrl);
+            await navigator.clipboard.writeText(absoluteUrl());
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
           }}
@@ -68,26 +66,33 @@ export function ResultShare({
       </div>
 
       <div className="flex gap-2.5">
-        <a
-          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(resultUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button
+          variant="secondary"
           className="flex-1"
+          onClick={() => {
+            const url = absoluteUrl();
+            window.open(
+              `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+              "_blank",
+              "noopener"
+            );
+          }}
         >
-          <Button variant="secondary" className="w-full">
-            Share on X
-          </Button>
-        </a>
-        <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(resultUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
+          Share on X
+        </Button>
+        <Button
+          variant="secondary"
           className="flex-1"
+          onClick={() => {
+            window.open(
+              `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(absoluteUrl())}`,
+              "_blank",
+              "noopener"
+            );
+          }}
         >
-          <Button variant="secondary" className="w-full">
-            Share on Facebook
-          </Button>
-        </a>
+          Share on Facebook
+        </Button>
       </div>
     </div>
   );
