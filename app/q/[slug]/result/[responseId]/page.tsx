@@ -72,14 +72,27 @@ export default async function ResultPage({ params }: Props) {
               Your score
             </div>
 
-            <div id="score-card" className="text-center mb-6">
-              <div className="text-[56px] font-extrabold text-text leading-none mb-2">
-                {Math.round(score)}%
+            <div
+              id="score-card"
+              className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-[#0d0d14] via-[#16121f] to-[#1c1730] border border-accent/20 mb-6"
+            >
+              <div className="text-center text-[11px] font-bold tracking-[0.14em] uppercase text-accent-soft mb-6">
+                WhoKnowsMe
               </div>
-              <p className="text-[14px] text-text-muted">
-                {response.takerName} on {quiz.creatorName}&apos;s quiz
+              <div className="text-center">
+                <div className="text-[72px] sm:text-[88px] font-extrabold text-text leading-none mb-3">
+                  {Math.round(score)}%
+                </div>
+                <p className="text-[14px] text-text-muted mb-4">
+                  {response.takerName} on {quiz.creatorName}&apos;s quiz
+                </p>
+                <div className="inline-block px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-[13px] text-accent-soft">
+                  {tier}
+                </div>
+              </div>
+              <p className="text-center text-[11px] text-text-muted mt-6">
+                Make yours at whoknowsme.com
               </p>
-              <p className="text-[13px] text-accent-soft mt-2">{tier}</p>
             </div>
 
             <ResultShare
