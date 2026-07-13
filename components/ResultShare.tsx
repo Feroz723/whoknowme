@@ -21,19 +21,19 @@ export function ResultShare({
   scorePercent: number;
 }) {
   const [copied, setCopied] = useState(false);
+  const [instaCopied, setInstaCopied] = useState(false);
 
   const resultPath = `/q/${slug}/result/${responseId}`;
   const text = shareText(takerName, creatorName, scorePercent);
 
   function absoluteUrl(): string {
-    return `${window.location.origin}${resultPath}`;
+    return `${window.location.origin}${resultPath}?shared=true`;
   }
 
   return (
-    <div>
-      <div className="flex gap-2.5 mb-2.5">
+    <div className="space-y-2.5">
+      <div className="grid grid-cols-2 gap-2.5">
         <Button
-          className="flex-1"
           onClick={() => {
             const url = absoluteUrl();
             const waText = `${takerName} scored ${Math.round(scorePercent)}% on ${creatorName}'s friendship quiz. Think you can beat that? ${url}`;
@@ -44,21 +44,17 @@ export function ResultShare({
         </Button>
         <Button
           variant="secondary"
-          className="flex-1"
           onClick={async () => {
             await navigator.clipboard.writeText(absoluteUrl());
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
+            setInstaCopied(true);
+            setTimeout(() => setInstaCopied(false), 1500);
+            window.open("https://www.instagram.com", "_blank", "noopener");
           }}
         >
-          {copied ? "Copied" : "Copy link"}
+          {instaCopied ? "Link Copied!" : "Share on Instagram"}
         </Button>
-      </div>
-
-      <div className="flex gap-2.5">
         <Button
           variant="secondary"
-          className="flex-1"
           onClick={() => {
             const url = absoluteUrl();
             window.open(
@@ -72,7 +68,6 @@ export function ResultShare({
         </Button>
         <Button
           variant="secondary"
-          className="flex-1"
           onClick={() => {
             window.open(
               `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(absoluteUrl())}`,
@@ -84,6 +79,18 @@ export function ResultShare({
           Share on Facebook
         </Button>
       </div>
+
+      <Button
+        variant="secondary"
+        className="w-full"
+        onClick={async () => {
+          await navigator.clipboard.writeText(absoluteUrl());
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1500);
+        }}
+      >
+        {copied ? "Copied" : "Copy link"}
+      </Button>
     </div>
   );
 }

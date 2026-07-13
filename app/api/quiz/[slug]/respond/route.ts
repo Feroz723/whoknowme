@@ -5,13 +5,26 @@ import { quizzes, questions, responses } from "@/db/schema";
 import { respondSchema } from "@/lib/validation";
 import { hashIp } from "@/lib/ids";
 import { scoreAnswers } from "@/lib/scoring";
-import { clientIpFrom } from "@/lib/rate-limit";
+import { checkRateLimit, clientIpFrom } from "@/lib/rate-limit";
+
+// Generous limit — real users won't hit 20 quiz takes in an hour,
+// but it stops automated spam.
+const RESPOND_LIMIT = { limit: 20, windowMs: 60 * 60 * 1000 };
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
+
+  const ip = clientIpFrom(req.headers);
+  const { allowed } = await checkRateLimit(`respond:${ip}`, RESPOND_LIMIT);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many submissions. Please try again later." },
+      { status: 429 }
+    );
+  }
 
   const body = await req.json().catch(() => null);
   const parsed = respondSchema.safeParse(body);

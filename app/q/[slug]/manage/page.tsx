@@ -5,6 +5,7 @@ import { db } from "@/db/client";
 import { quizzes, responses } from "@/db/schema";
 import { hashToken } from "@/lib/ids";
 import { ManageLinks } from "@/components/ManageLinks";
+import { LeaderboardRow } from "@/components/LeaderboardRow";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -64,22 +65,12 @@ export default async function ManagePage({ params, searchParams }: Props) {
           {leaderboard.length > 0 ? (
             <div className="space-y-2 mb-6 max-h-[360px] overflow-y-auto pr-1">
               {leaderboard.map((entry, i) => (
-                <div
+                <LeaderboardRow
                   key={entry.id}
-                  className="flex items-center justify-between rounded-lg border border-border bg-surface-raised px-3.5 py-2.5"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="font-mono text-[12px] text-accent-soft w-5 shrink-0">
-                      {i + 1}
-                    </span>
-                    <span className="text-[13.5px] text-text truncate">
-                      {entry.takerName}
-                    </span>
-                  </div>
-                  <span className="font-mono text-[13px] font-semibold text-text shrink-0 ml-3">
-                    {Math.round(parseFloat(entry.scorePercent))}%
-                  </span>
-                </div>
+                  entry={entry}
+                  creatorName={quiz.creatorName}
+                  rank={i + 1}
+                />
               ))}
             </div>
           ) : null}

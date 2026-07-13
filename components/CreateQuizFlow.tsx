@@ -20,7 +20,6 @@ type Phase = "setup" | "bank" | "editing" | "review" | "success" | "error";
 export function CreateQuizFlow() {
   const [phase, setPhase] = useState<Phase>("setup");
   const [creatorName, setCreatorName] = useState("");
-  const [language, setLanguage] = useState<"en" | "hi">("en");
   const [questions, setQuestions] = useState<DraftQuestion[]>([]);
   const [draft, setDraft] = useState<DraftQuestion | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -45,7 +44,7 @@ export function CreateQuizFlow() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           creatorName,
-          language,
+          language: "en",
           turnstileToken,
           questions: questions.map((q) => ({
             prompt: q.prompt,
@@ -87,27 +86,6 @@ export function CreateQuizFlow() {
           maxLength={40}
           onChange={(e) => setCreatorName(e.target.value)}
         />
-
-        <div className="mt-5">
-          <span className="block text-[12px] font-medium text-text-muted mb-1.5">
-            Language
-          </span>
-          <div className="flex gap-2">
-            {(["en", "hi"] as const).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLanguage(l)}
-                className={`px-4 py-2 rounded-lg text-[13.5px] font-medium border transition-colors ${
-                  language === l
-                    ? "bg-accent border-accent text-white"
-                    : "border-border text-text-muted"
-                }`}
-              >
-                {l === "en" ? "English" : "हिंदी"}
-              </button>
-            ))}
-          </div>
-        </div>
 
         <Button
           className="w-full mt-7"

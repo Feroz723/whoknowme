@@ -10,40 +10,60 @@ export function DownloadButton({ targetId, filename }: { targetId: string; filen
     const el = document.getElementById(targetId);
     if (!el) return;
 
-    const width = el.offsetWidth;
-    const height = el.offsetHeight;
+    // Reset scroll positions of any scrolling containers or parent window
+    // temporarily to prevent offset calculation bugs during DOM cloning.
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    window.scrollTo(0, 0);
 
-    // Let one frame of layout settle before capture so container/aspect
-    // sizing is final.
-    await new Promise((r) => requestAnimationFrame(() => r(null)));
+    // Read the true RENDERED pixel size from the live DOM.
+    const rect = el.getBoundingClientRect();
+    const width = Math.ceil(rect.width);
+    const height = Math.ceil(rect.height);
 
     setLoading(true);
     try {
       const dataUrl = await toPng(el, {
         backgroundColor: "#16121f",
         pixelRatio: 2,
+        // Set canvas to the high-res size (pixelRatio * CSS size)
+        canvasWidth: width * 2,
+        canvasHeight: height * 2,
         width,
         height,
-        // Applied to the cloned node html-to-image renders from — neutralises
-        // any transform/scale and pins the clone to the on-screen geometry so
-        // the canvas and content match (no clipping / blank space).
+        // Override styles on the cloned root element to remove margins/position shifts
+        // that crop/cut off the content inside the SVG viewBox.
         style: {
-          transform: "none",
-          transformOrigin: "top left",
           width: `${width}px`,
           height: `${height}px`,
-          aspectRatio: "auto",
+          maxWidth: "none",
+          maxHeight: "none",
+          minWidth: "none",
+          minHeight: "none",
+          margin: "0",
+          position: "relative",
+          left: "0",
+          top: "0",
+          transform: "none",
+          aspectRatio: "unset",
+          overflow: "hidden",
+        } as any,
+        filter: (node: HTMLElement) => {
+          if (!(node instanceof HTMLElement)) return true;
+          return true;
         },
         cacheBust: true,
       });
+
       const link = document.createElement("a");
       link.download = filename ?? "whoknowsme-score.png";
       link.href = dataUrl;
       link.click();
-    } catch {
-      // Capture can fail if external images haven't loaded — the
-      // score text is what matters.
+    } catch (e) {
+      console.error("Failed to generate image:", e);
     } finally {
+      // Restore the original scroll position
+      window.scrollTo(scrollX, scrollY);
       setLoading(false);
     }
   }, [targetId, filename]);

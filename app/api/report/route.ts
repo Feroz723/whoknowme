@@ -4,8 +4,22 @@ import { db } from "@/db/client";
 import { quizzes, reports } from "@/db/schema";
 import { reportSchema } from "@/lib/validation";
 import { notifyReport } from "@/lib/notify";
+import { checkRateLimit, clientIpFrom } from "@/lib/rate-limit";
+
+// Tight limit — reporting should be rare; this blocks spam floods
+// that could fill the reports table and spam admin email.
+const REPORT_LIMIT = { limit: 5, windowMs: 60 * 60 * 1000 };
 
 export async function POST(req: NextRequest) {
+  const ip = clientIpFrom(req.headers);
+  const { allowed } = await checkRateLimit(`report:${ip}`, REPORT_LIMIT);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many reports. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   const body = await req.json().catch(() => null);
   const parsed = reportSchema.safeParse(body);
   if (!parsed.success) {

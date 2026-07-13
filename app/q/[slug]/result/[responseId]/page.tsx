@@ -11,6 +11,7 @@ import { SpotlightCard } from "@/components/SpotlightCard";
 
 type Props = {
   params: Promise<{ slug: string; responseId: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -42,8 +43,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ResultPage({ params }: Props) {
+export default async function ResultPage({ params, searchParams }: Props) {
   const { slug, responseId } = await params;
+  const resolvedSearchParams = await searchParams;
+  const isShared = resolvedSearchParams.shared === "true";
 
   const quiz = await db.query.quizzes.findFirst({
     where: eq(quizzes.slug, slug),
@@ -71,7 +74,7 @@ export default async function ResultPage({ params }: Props) {
           <SpotlightCard className="relative rounded-2xl bg-surface border border-border p-6 shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)]">
             <div id="result-card" className="relative">
             <div className="text-[11px] font-bold tracking-[0.14em] uppercase text-accent-soft mb-3">
-              Your score
+              {isShared ? `${response.takerName}'s score` : "Your score"}
             </div>
 
             <div
@@ -114,13 +117,15 @@ export default async function ResultPage({ params }: Props) {
               </div>
             </div>
 
-            <ResultShare
-              slug={slug}
-              responseId={responseId}
-              takerName={response.takerName}
-              creatorName={quiz.creatorName}
-              scorePercent={score}
-            />
+            {!isShared && (
+              <ResultShare
+                slug={slug}
+                responseId={responseId}
+                takerName={response.takerName}
+                creatorName={quiz.creatorName}
+                scorePercent={score}
+              />
+            )}
 
             <div className="mt-6 pt-5 border-t border-border space-y-2.5">
               <Link
@@ -129,13 +134,9 @@ export default async function ResultPage({ params }: Props) {
               >
                 Make your own quiz
               </Link>
-              <Link
-                href={`/q/${slug}`}
-                className="block w-full min-h-[44px] px-5 rounded-xl font-semibold text-[15px] transition-colors bg-transparent border border-border text-text hover:border-accent-soft text-center leading-[44px]"
-              >
-                Back to quiz
-              </Link>
-              <DownloadButton targetId="score-card" filename={`whoknowsme-${slug}-${responseId.slice(0, 8)}.png`} />
+              {!isShared && (
+                <DownloadButton targetId="score-card" filename={`whoknowsme-${slug}-${responseId.slice(0, 8)}.png`} />
+              )}
             </div>
             </div>
           </SpotlightCard>
