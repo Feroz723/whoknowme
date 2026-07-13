@@ -78,28 +78,47 @@ export function structuralSpamCheck(input: CreateQuizInput): string | null {
 }
 
 /**
- * OpenAI Moderation API wrapper.
+ * Groq-powered content moderation wrapper.
  *
- * Requires the OPENAI_API_KEY environment variable. If the key is missing
+ * Uses a chat completion model to classify content as safe or violating.
+ * Groq's API is OpenAI-compatible so the fetch pattern is the same.
+ *
+ * Requires the GROQ_API_KEY environment variable. If the key is missing
  * the call is skipped and the content is allowed through — this avoids a
  * hard failure during local dev while still being safe in production where
  * the env var must be set.
  *
- * https://platform.openai.com/docs/guides/moderation
+ * https://console.groq.com/keys
  */
 export async function moderateText(text: string): Promise<{ flagged: boolean; categories?: string[] }> {
-  const key = process.env.OPENAI_API_KEY;
+  const key = process.env.GROQ_API_KEY;
   if (!key) {
     return { flagged: false };
   }
 
-  const res = await fetch("https://api.openai.com/v1/moderations", {
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${key}`,
     },
-    body: JSON.stringify({ input: text }),
+    body: JSON.stringify({
+      model: "llama-3.1-8b-instant",
+      messages: [
+        {
+          role: "system",
+          content: [
+            "You are a content moderation classifier. Respond with JSON only.",
+            'If the text is safe, return: {"flagged": false}',
+            'If the text violates guidelines, return: {"flagged": true, "categories": ["<reason>"]}',
+            "Categories: hate, harassment, sexual, violence, self-harm, spam.",
+          ].join(" "),
+        },
+        { role: "user", content: text },
+      ],
+      temperature: 0,
+      response_format: { type: "json_object" },
+    }),
   });
 
   if (!res.ok) {
@@ -107,17 +126,19 @@ export async function moderateText(text: string): Promise<{ flagged: boolean; ca
   }
 
   const body = await res.json() as {
-    results: Array<{ flagged: boolean; categories: Record<string, boolean> }>;
+    choices: Array<{ message: { content: string } }>;
   };
 
-  const result = body.results?.[0];
-  if (!result?.flagged) {
+  const content = body.choices?.[0]?.message?.content;
+  if (!content) return { flagged: false };
+
+  try {
+    const parsed = JSON.parse(content) as { flagged: boolean; categories?: string[] };
+    return {
+      flagged: parsed.flagged === true,
+      categories: parsed.categories,
+    };
+  } catch {
     return { flagged: false };
   }
-
-  const flaggedCategories = Object.entries(result.categories ?? {})
-    .filter(([, v]) => v)
-    .map(([k]) => k);
-
-  return { flagged: true, categories: flaggedCategories };
 }
