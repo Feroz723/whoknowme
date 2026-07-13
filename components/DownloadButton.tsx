@@ -10,17 +10,22 @@ export function DownloadButton({ targetId, filename }: { targetId: string; filen
     const el = document.getElementById(targetId);
     if (!el) return;
 
+    const originalStyle = el.getAttribute("style");
+    const width = el.offsetWidth;
+    const height = Math.round((width * 16) / 9);
+
+    // Force explicit pixel dimensions on the real element so the cloned
+    // node renders at full height (html-to-image reads computed styles,
+    // and `aspect-ratio` is unreliable inside the clone).
+    el.style.width = `${width}px`;
+    el.style.height = `${height}px`;
+    el.style.aspectRatio = "auto";
+
     setLoading(true);
     try {
-      const width = el.offsetWidth;
-      const height = Math.round(width * 16 / 9);
-
       const dataUrl = await toPng(el, {
         backgroundColor: "#16121f",
         pixelRatio: 2,
-        width,
-        height,
-        style: { height: `${height}px`, aspectRatio: "unset" },
         cacheBust: true,
       });
       const link = document.createElement("a");
@@ -29,9 +34,13 @@ export function DownloadButton({ targetId, filename }: { targetId: string; filen
       link.click();
     } catch {
       // Capture can fail if external images haven't loaded — the
-      // OG image preview inside the card is decorative for the
-      // download; the score text is what matters.
+      // score text is what matters.
     } finally {
+      if (originalStyle !== null) {
+        el.setAttribute("style", originalStyle);
+      } else {
+        el.removeAttribute("style");
+      }
       setLoading(false);
     }
   }, [targetId, filename]);
