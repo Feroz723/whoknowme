@@ -111,10 +111,6 @@ export default async function ResultPage({ params }: Props) {
                 <div className="inline-block rounded-full border border-white/25 bg-white/10 px-5 py-2.5 text-[14px] font-medium text-white">
                   {tier}
                 </div>
-
-                <p className="mt-8 text-[11px] text-white/45">
-                  Make yours at whoknowsme.com
-                </p>
               </div>
             </div>
 

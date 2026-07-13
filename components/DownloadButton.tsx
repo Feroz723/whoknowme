@@ -12,9 +12,15 @@ export function DownloadButton({ targetId, filename }: { targetId: string; filen
 
     setLoading(true);
     try {
+      const width = el.offsetWidth;
+      const height = Math.round(width * 16 / 9);
+
       const dataUrl = await toPng(el, {
         backgroundColor: "#16121f",
         pixelRatio: 2,
+        width,
+        height,
+        style: { height: `${height}px`, aspectRatio: "unset" },
         cacheBust: true,
       });
       const link = document.createElement("a");
