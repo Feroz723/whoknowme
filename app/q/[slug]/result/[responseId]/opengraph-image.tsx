@@ -57,12 +57,12 @@ export default async function Image({ params }: Props) {
             border: "2px solid #2b2340",
             borderRadius: "24px",
             padding: "60px 80px",
-            width: "100%",
-            maxWidth: "900px",
+            width: "900px",
           }}
         >
           <div
             style={{
+              display: "flex",
               fontSize: 22,
               color: "#b79bff",
               letterSpacing: "0.14em",
@@ -75,6 +75,7 @@ export default async function Image({ params }: Props) {
           </div>
           <div
             style={{
+              display: "flex",
               fontSize: 120,
               fontWeight: 800,
               color: "#f4f2fb",
@@ -86,6 +87,7 @@ export default async function Image({ params }: Props) {
           </div>
           <div
             style={{
+              display: "flex",
               fontSize: 28,
               color: "#9184b8",
               marginBottom: 20,
@@ -95,6 +97,7 @@ export default async function Image({ params }: Props) {
           </div>
           <div
             style={{
+              display: "flex",
               fontSize: 22,
               color: "#7c3aed",
               textAlign: "center",
