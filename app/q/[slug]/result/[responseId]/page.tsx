@@ -61,8 +61,8 @@ export default async function ResultPage({ params }: Props) {
 
   return (
     <main className="flex-1 flex flex-col px-6 py-10 sm:py-16">
-      <div className="max-w-md w-full mx-auto">
-        <div className="relative w-full max-w-md mx-auto">
+      <div className="w-full mx-auto">
+        <div className="relative w-full max-w-lg mx-auto sm:max-w-xl lg:max-w-2xl">
           <div className="absolute inset-x-3 -bottom-3 h-full rounded-2xl bg-surface-raised border border-border rotate-[-2.5deg]" />
           <div className="absolute inset-x-1.5 -bottom-1.5 h-full rounded-2xl bg-surface border border-border rotate-[1.5deg]" />
 

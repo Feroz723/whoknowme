@@ -18,7 +18,7 @@ export default async function ManagePage({ params, searchParams }: Props) {
   if (!token) {
     return (
       <main className="flex-1 flex flex-col px-6 py-10 sm:py-16">
-        <div className="max-w-md w-full mx-auto">
+        <div className="w-full max-w-lg mx-auto sm:max-w-xl lg:max-w-2xl">
           <div className="rounded-2xl bg-surface border border-border p-6">
             <h2 className="text-[18px] font-bold text-text mb-2">Private link required</h2>
             <p className="text-[13.5px] text-text-muted">
@@ -47,7 +47,7 @@ export default async function ManagePage({ params, searchParams }: Props) {
 
   return (
     <main className="flex-1 flex flex-col px-6 py-10 sm:py-16">
-      <div className="max-w-md w-full mx-auto">
+      <div className="w-full max-w-lg mx-auto sm:max-w-xl lg:max-w-2xl">
         <div className="rounded-2xl bg-surface border border-border p-6">
           <div className="text-[11px] font-bold tracking-[0.14em] uppercase text-accent-soft mb-3">
             Your quiz results

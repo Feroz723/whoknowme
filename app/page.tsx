@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <main className="flex-1 flex flex-col">
       <section className="px-6 pt-16 pb-14 sm:pt-24 sm:pb-20">
-        <div className="max-w-5xl mx-auto grid gap-14 sm:grid-cols-2 sm:items-center">
+        <div className="max-w-7xl mx-auto grid gap-14 sm:grid-cols-2 sm:items-center">
           <div>
             <div className="inline-block text-[11px] font-mono font-medium tracking-[0.14em] uppercase text-accent-soft bg-accent/10 border border-accent/30 rounded-full px-3 py-1 mb-6">
               Built for your group chat
@@ -76,7 +76,7 @@ export default function Home() {
       </section>
 
       <section className="px-6 pb-24">
-        <div className="max-w-5xl mx-auto grid gap-5 sm:grid-cols-3">
+        <div className="max-w-7xl mx-auto grid gap-5 sm:grid-cols-3">
           {STEPS.map((s) => (
             <div
               key={s.n}
