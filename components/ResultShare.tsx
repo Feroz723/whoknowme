@@ -24,7 +24,6 @@ export function ResultShare({
 
   const resultPath = `/q/${slug}/result/${responseId}`;
   const text = shareText(takerName, creatorName, scorePercent);
-  const ogUrl = `${resultPath}/opengraph-image`;
 
   function absoluteUrl(): string {
     return `${window.location.origin}${resultPath}`;
@@ -32,15 +31,6 @@ export function ResultShare({
 
   return (
     <div>
-      <div className="rounded-xl border border-border overflow-hidden mb-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={ogUrl}
-          alt={`${takerName} scored ${Math.round(scorePercent)}%`}
-          className="w-full h-auto"
-        />
-      </div>
-
       <div className="flex gap-2.5 mb-2.5">
         <Button
           className="flex-1"

@@ -72,7 +72,7 @@ export default async function ResultPage({ params }: Props) {
               Your score
             </div>
 
-            <div className="text-center mb-6">
+            <div id="score-card" className="text-center mb-6">
               <div className="text-[56px] font-extrabold text-text leading-none mb-2">
                 {Math.round(score)}%
               </div>
@@ -103,7 +103,7 @@ export default async function ResultPage({ params }: Props) {
               >
                 Back to quiz
               </Link>
-              <DownloadButton targetId="result-card" filename={`whoknowsme-${slug}-${responseId.slice(0, 8)}.png`} />
+              <DownloadButton targetId="score-card" filename={`whoknowsme-${slug}-${responseId.slice(0, 8)}.png`} />
             </div>
           </div>
         </div>
