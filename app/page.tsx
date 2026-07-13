@@ -128,10 +128,10 @@ export default function Home() {
                 </h2>
                 <p className="text-[14px] text-text-muted leading-relaxed">
                   When someone finishes your quiz they get a score and a
-                  shareable image — the kind people post in group chats,
-                  on WhatsApp, X, or anywhere they hang out. That image is
-                  the whole growth loop: someone sees it, gets curious,
-                  makes their own quiz.
+                  shareable image — the kind people post on Instagram,
+                  Facebook, WhatsApp, X, or anywhere they hang out. That
+                  image is the whole growth loop: someone sees it, gets
+                  curious, makes their own quiz.
                 </p>
               </div>
 
@@ -247,6 +247,9 @@ export default function Home() {
             </a>
             <a href="/terms" className="hover:text-text transition-colors">
               Terms
+            </a>
+            <a href="mailto:hello@whoknowsme.com" className="hover:text-text transition-colors">
+              Feedback
             </a>
             <span aria-hidden="true">&middot;</span>
             <span>&copy; {new Date().getFullYear()}</span>
