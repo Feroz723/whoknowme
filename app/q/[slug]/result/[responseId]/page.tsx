@@ -7,6 +7,7 @@ import { quizzes, responses } from "@/db/schema";
 import { scoreTier } from "@/lib/scoring";
 import { ResultShare } from "@/components/ResultShare";
 import { DownloadButton } from "@/components/DownloadButton";
+import { SpotlightCard } from "@/components/SpotlightCard";
 
 type Props = {
   params: Promise<{ slug: string; responseId: string }>;
@@ -67,7 +68,8 @@ export default async function ResultPage({ params }: Props) {
           <div className="absolute inset-x-3 -bottom-3 h-full rounded-2xl bg-surface-raised border border-border rotate-[-2.5deg]" />
           <div className="absolute inset-x-1.5 -bottom-1.5 h-full rounded-2xl bg-surface border border-border rotate-[1.5deg]" />
 
-          <div id="result-card" className="relative rounded-2xl bg-surface border border-border p-6 shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)]">
+          <SpotlightCard className="relative rounded-2xl bg-surface border border-border p-6 shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)]">
+            <div id="result-card" className="relative">
             <div className="text-[11px] font-bold tracking-[0.14em] uppercase text-accent-soft mb-3">
               Your score
             </div>
@@ -118,7 +120,8 @@ export default async function ResultPage({ params }: Props) {
               </Link>
               <DownloadButton targetId="score-card" filename={`whoknowsme-${slug}-${responseId.slice(0, 8)}.png`} />
             </div>
-          </div>
+            </div>
+          </SpotlightCard>
         </div>
       </div>
     </main>
