@@ -128,9 +128,10 @@ export default function Home() {
                 </h2>
                 <p className="text-[14px] text-text-muted leading-relaxed">
                   When someone finishes your quiz they get a score and a
-                  shareable image —&nbsp;the kind people actually post in the
-                  group chat. That image is the whole growth loop: someone
-                  sees it, gets curious, makes their own quiz.
+                  shareable image — the kind people post in group chats,
+                  on WhatsApp, X, or anywhere they hang out. That image is
+                  the whole growth loop: someone sees it, gets curious,
+                  makes their own quiz.
                 </p>
               </div>
 
