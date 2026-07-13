@@ -76,25 +76,46 @@ export default async function ResultPage({ params }: Props) {
 
             <div
               id="score-card"
-              className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-[#0d0d14] via-[#16121f] to-[#1c1730] border border-accent/20 mb-6"
+              className="relative mx-auto mb-6 w-full max-w-sm overflow-hidden rounded-3xl p-5"
+              style={{
+                aspectRatio: "9 / 16",
+                background:
+                  "radial-gradient(120% 70% at 15% 5%, rgba(124,58,237,0.55) 0%, transparent 50%), radial-gradient(120% 70% at 95% 100%, rgba(76,29,149,0.6) 0%, transparent 50%), linear-gradient(160deg, #1a1033 0%, #2d1b69 48%, #0d0a1f 100%)",
+              }}
             >
-              <div className="text-center text-[11px] font-bold tracking-[0.14em] uppercase text-accent-soft mb-6">
-                WhoKnowsMe
-              </div>
-              <div className="text-center">
-                <div className="text-[72px] sm:text-[88px] font-extrabold text-text leading-none mb-3">
+              <div
+                className="absolute left-[-20%] top-[34%] h-[2px] w-[140%] -rotate-6"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent, #a78bfa, transparent)",
+                  boxShadow: "0 0 12px 2px rgba(167,139,250,0.8)",
+                }}
+              />
+
+              <div className="relative z-10 flex h-full w-full flex-col items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] px-6 py-8 text-center">
+                <div className="mb-6 text-[11px] font-bold uppercase tracking-[0.16em] text-accent-soft">
+                  WhoKnowsMe
+                </div>
+
+                <div
+                  className="mb-4 text-[104px] font-extrabold leading-none text-white"
+                  style={{ textShadow: "0 0 28px rgba(124,58,237,0.7)" }}
+                >
                   {Math.round(score)}%
                 </div>
-                <p className="text-[14px] text-text-muted mb-4">
+
+                <p className="mb-7 text-[15px] text-white/80">
                   {response.takerName} on {quiz.creatorName}&apos;s quiz
                 </p>
-                <div className="inline-block px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-[13px] text-accent-soft">
+
+                <div className="inline-block rounded-full border border-white/25 bg-white/10 px-5 py-2.5 text-[14px] font-medium text-white">
                   {tier}
                 </div>
+
+                <p className="mt-8 text-[11px] text-white/45">
+                  Make yours at whoknowsme.com
+                </p>
               </div>
-              <p className="text-center text-[11px] text-text-muted mt-6">
-                Make yours at whoknowsme.com
-              </p>
             </div>
 
             <ResultShare
