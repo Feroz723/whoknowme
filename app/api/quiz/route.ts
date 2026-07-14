@@ -61,21 +61,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: spamReason }, { status: 400 });
   }
 
-  // Content moderation via OpenAI — check creator name + all question text.
+  // Content moderation via Groq — check creator name + all question text.
   const allText = [
     parsed.data.creatorName,
     ...parsed.data.questions.flatMap((q) => [q.prompt, ...q.options]),
   ].join(" ");
-  const { flagged, categories } = await moderateText(allText);
-  if (flagged) {
-    return NextResponse.json(
-      {
-        error: `Your quiz was flagged by our moderation system${
-          categories?.length ? ` (${categories.join(", ")})` : ""
-        }. Please review and edit your content.`,
-      },
-      { status: 400 }
-    );
+
+  try {
+    const { flagged, categories } = await moderateText(allText);
+    if (flagged) {
+      return NextResponse.json(
+        {
+          error: `Your quiz was flagged by our moderation system${
+            categories?.length ? ` (${categories.join(", ")})` : ""
+          }. Please review and edit your content.`,
+        },
+        { status: 400 }
+      );
+    }
+  } catch (e) {
+    // If moderation service is down, allow the quiz through rather than
+    // blocking all creation with a 500.
+    console.error("Moderation check failed:", e);
   }
 
   const { creatorName, language, questions: qs } = parsed.data;
