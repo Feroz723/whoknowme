@@ -44,21 +44,28 @@ export function TurnstileWidget({
 
     function renderWidget() {
       if (!window.turnstile || !container) return;
-      // Remove any previous widget before rendering a new one.
+      
+      // Clear container and reset widgetId ref
+      container.innerHTML = "";
       if (widgetId.current) {
         try {
           window.turnstile.remove(widgetId.current);
-        } catch {
-          // Widget may already be gone.
+        } catch (e) {
+          console.warn("Error removing widget:", e);
         }
         widgetId.current = null;
       }
-      widgetId.current = window.turnstile.render(container, {
-        sitekey: key,
-        callback: (token: string) => onVerifyRef.current(token),
-        "expired-callback": () => onExpireRef.current?.(),
-        theme: "dark",
-      });
+
+      try {
+        widgetId.current = window.turnstile.render(container, {
+          sitekey: key,
+          callback: (token: string) => onVerifyRef.current(token),
+          "expired-callback": () => onExpireRef.current?.(),
+          theme: "dark",
+        });
+      } catch (e) {
+        console.error("Turnstile render failed:", e);
+      }
     }
 
     // If the Turnstile script is already loaded, render immediately.
