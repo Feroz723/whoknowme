@@ -6,6 +6,9 @@ import { quizzes, responses } from "@/db/schema";
 import { hashToken } from "@/lib/ids";
 import { ManageLinks } from "@/components/ManageLinks";
 import { LeaderboardRow } from "@/components/LeaderboardRow";
+import { AutoRefresh } from "@/components/AutoRefresh";
+
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -48,6 +51,7 @@ export default async function ManagePage({ params, searchParams }: Props) {
 
   return (
     <main className="flex-1 flex flex-col px-6 py-10 sm:py-16">
+      <AutoRefresh intervalMs={5000} />
       <div className="w-full max-w-lg mx-auto sm:max-w-xl lg:max-w-2xl">
         <div className="rounded-2xl bg-surface border border-border p-6">
           <div className="text-[11px] font-bold tracking-[0.14em] uppercase text-accent-soft mb-3">
