@@ -60,6 +60,24 @@ export function CreateQuizFlow() {
         return;
       }
       setResult({ takeUrl: data.takeUrl, editUrl: data.editUrl });
+      
+      // Save to localStorage
+      try {
+        const saved = localStorage.getItem("whoknowsme_my_quizzes");
+        const list = saved ? JSON.parse(saved) : [];
+        if (!list.some((item: any) => item.slug === data.slug)) {
+          list.push({
+            slug: data.slug,
+            editUrl: data.editUrl,
+            creatorName,
+            createdAt: new Date().toISOString(),
+          });
+          localStorage.setItem("whoknowsme_my_quizzes", JSON.stringify(list));
+        }
+      } catch (e) {
+        console.warn("Could not save quiz to localStorage:", e);
+      }
+
       setPhase("success");
     } catch {
       setErrorMsg("Couldn't reach the server. Check your connection and try again.");

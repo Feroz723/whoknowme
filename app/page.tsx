@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/Button";
 import { StackedCard } from "@/components/StackedCard";
+import { MyQuizzes } from "@/components/MyQuizzes";
 
 const STEPS = [
   {
@@ -51,12 +52,15 @@ export default function Home() {
           <span className="text-[15px] font-bold text-text tracking-tight">
             WhoKnowsMe
           </span>
-          <Link
-            href="/create"
-            className="text-[13px] font-semibold text-accent-soft hover:text-text transition-colors"
-          >
-            Create quiz
-          </Link>
+          <div className="flex items-center gap-5">
+            <MyQuizzes />
+            <Link
+              href="/create"
+              className="text-[13px] font-semibold text-accent-soft hover:text-text transition-colors"
+            >
+              Create quiz
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -254,7 +258,8 @@ export default function Home() {
             <span aria-hidden="true">&middot;</span>
             <span>&copy; {new Date().getFullYear()}</span>
           </div>
-          <div className="flex items-center gap-4 text-[12px]">
+          <div className="flex items-center gap-5 text-[12px]">
+            <MyQuizzes />
             <a
               href="/create"
               className="font-semibold text-accent-soft hover:text-text transition-colors"
