@@ -258,14 +258,24 @@ export default function Home() {
             <span aria-hidden="true">&middot;</span>
             <span>&copy; {new Date().getFullYear()}</span>
           </div>
-          <div className="flex items-center gap-5 text-[12px]">
-            <MyQuizzes />
-            <a
-              href="/create"
-              className="font-semibold text-accent-soft hover:text-text transition-colors"
-            >
-              Create your quiz
-            </a>
+          <div className="flex flex-col sm:flex-row items-center gap-5 text-[12px]">
+            <div className="flex items-center gap-3">
+              <a href="https://fazier.com/launches/whoknowsme.techpick.tech" target="_blank" rel="noopener noreferrer">
+                <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width={120} alt="Fazier badge" className="h-auto" />
+              </a>
+              <a href="https://fazier.com/launches/whoknowsme.techpick.tech" target="_blank" rel="noopener noreferrer">
+                <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=light" width={250} alt="Fazier badge" className="h-auto" />
+              </a>
+            </div>
+            <div className="flex items-center gap-5">
+              <MyQuizzes />
+              <a
+                href="/create"
+                className="font-semibold text-accent-soft hover:text-text transition-colors"
+              >
+                Create your quiz
+              </a>
+            </div>
           </div>
         </div>
       </footer>
