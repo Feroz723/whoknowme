@@ -272,6 +272,9 @@ export default function Home() {
               <a href="https://www.producthunt.com/products/whoknowsme/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-whoknowsme" target="_blank" rel="noopener noreferrer">
                 <img src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1271011&theme=light" alt="WhoKnowsMe - The friendship quiz for your group chat | Product Hunt" style={{ width: "250px", height: "54px" }} width={250} height={54} />
               </a>
+              <a href="https://viberank.dev/apps/WhoKnowsMe" target="_blank" rel="noopener noreferrer">
+                <img src="https://viberank.dev/badge?app=WhoKnowsMe&theme=dark" alt="WhoKnowsMe on VibeRank" className="h-[54px] w-auto" />
+              </a>
             </div>
             <div className="flex items-center gap-5">
               <MyQuizzes />
