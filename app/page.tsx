@@ -266,6 +266,9 @@ export default function Home() {
               <a href="https://fazier.com/launches/whoknowsme.techpick.tech" target="_blank" rel="noopener noreferrer">
                 <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=light" width={250} alt="Fazier badge" className="h-auto" />
               </a>
+              <a href="https://startupbase.io/products/whoknwosme?utm_source=startupbase&utm_medium=badge&utm_campaign=launch-badge-light" target="_blank" rel="noopener noreferrer">
+                <img src="https://statics.startupbase.io/site/badges/launched-on-sb.svg" alt="Launched on StartupBase" height={55} style={{ height: "55px", width: "auto" }} />
+              </a>
             </div>
             <div className="flex items-center gap-5">
               <MyQuizzes />
