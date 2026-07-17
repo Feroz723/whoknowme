@@ -259,7 +259,7 @@ export default function Home() {
             <span>&copy; {new Date().getFullYear()}</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-5 text-[12px]">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start">
               <a href="https://fazier.com/launches/whoknowsme.techpick.tech" target="_blank" rel="noopener noreferrer">
                 <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width={120} alt="Fazier badge" className="h-auto" />
               </a>
@@ -268,6 +268,9 @@ export default function Home() {
               </a>
               <a href="https://startupbase.io/products/whoknwosme?utm_source=startupbase&utm_medium=badge&utm_campaign=launch-badge-light" target="_blank" rel="noopener noreferrer">
                 <img src="https://statics.startupbase.io/site/badges/launched-on-sb.svg" alt="Launched on StartupBase" height={55} style={{ height: "55px", width: "auto" }} />
+              </a>
+              <a href="https://www.producthunt.com/products/whoknowsme/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-whoknowsme" target="_blank" rel="noopener noreferrer">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1271011&theme=light" alt="WhoKnowsMe - The friendship quiz for your group chat | Product Hunt" style={{ width: "250px", height: "54px" }} width={250} height={54} />
               </a>
             </div>
             <div className="flex items-center gap-5">
